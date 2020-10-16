@@ -8,10 +8,11 @@ from .animation_interface import AnimationInterface
 
 
 class FadeSequenceConfig:
-    def __init__(self, sequence, target_rgb, speed):
+    def __init__(self, sequence, target_rgb, speed, clear_first):
         self.sequence = sequence
         self.target_rgb = target_rgb
         self.speed = speed
+        self.clear_first = clear_first
 
 
 class FadeSequenceConfigSchema(Schema):
@@ -26,6 +27,7 @@ class FadeSequenceConfigSchema(Schema):
         missing=[255, 255, 255],
     )
     speed = fields.Int(validate=validate.Range(min=1), missing=20)
+    clear_first = fields.Boolean(missing=True)
 
     @post_load
     def make_config(self, data, **kwargs):
@@ -44,8 +46,13 @@ class FadeSequence(AnimationInterface):
         ]
 
         self._step = 0
+        self._cleared = False
 
     def set_next_frame(self):
+        if self._cleared is False and self.config.clear_first is True:
+            self.light.clear_leds()
+            self._cleared = True
+
         led_idx = self.config.sequence[self._step]
         cur_rgb = self.light._state[led_idx].copy()
         for col_idx, col in enumerate(cur_rgb):
