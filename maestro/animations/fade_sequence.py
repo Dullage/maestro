@@ -58,7 +58,7 @@ class FadeSequence(AnimationInterface):
         for col_idx, col in enumerate(cur_rgb):
             if col > self.config.target_rgb[col_idx]:
                 cur_rgb[col_idx] = max(
-                    [col - self.confog.speed, self.config.target_rgb[col_idx]]
+                    [col - self.config.speed, self.config.target_rgb[col_idx]]
                 )
             elif col < self.config.target_rgb[col_idx]:
                 cur_rgb[col_idx] = min(
