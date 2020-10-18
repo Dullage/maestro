@@ -94,16 +94,13 @@ class BouncingBall(AnimationInterface):
         if self._falling is True:
             self._cur_height -= self._cur_speed
             if self._cur_height <= 0:
-                self._cur_height = (
-                    abs(self._cur_height) * self.config.bounciness
-                )
+                self._cur_height = 0
                 self._falling = False
                 self._cur_speed = self._cur_speed * self.config.bounciness
         # Going up
         else:
-            self._cur_height += (
-                self._cur_speed
-            )  # TODO: Do I need a limit here?
+            self._cur_height += self._cur_speed
+            # TODO: Do I need a limit here?
 
     @property
     def _cur_height_round(self):

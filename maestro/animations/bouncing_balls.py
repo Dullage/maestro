@@ -18,9 +18,9 @@ class BouncingBallsConfigSchema(Schema):
         fields.Dict(),
         validate=validate.Length(min=1),
         missing=[
-            {"bounciness": 0.6, "trail_length": 3, "colour": [255, 179, 186]},
-            {"bounciness": 0.75, "trail_length": 3, "colour": [186, 255, 201]},
-            {"bounciness": 0.9, "trail_length": 3, "colour": [186, 225, 255]},
+            {"bounciness": 0.75, "trail_length": 3, "colour": [255, 179, 186]},
+            {"bounciness": 0.8, "trail_length": 3, "colour": [186, 255, 201]},
+            {"bounciness": 0.85, "trail_length": 3, "colour": [186, 225, 255]},
         ],
     )
 
@@ -43,6 +43,9 @@ class BouncingBalls(AnimationInterface):
 
     def set_next_frame(self):
         self.light.clear_leds()
+        all_finished = True
         for ball in self.balls:
-            ball.set_next_frame()
-        return False
+            ball_finished = ball.set_next_frame()
+            if ball_finished is False:
+                all_finished = False
+        return all_finished
