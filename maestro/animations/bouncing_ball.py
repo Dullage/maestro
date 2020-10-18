@@ -31,7 +31,7 @@ class BouncingBallConfig:
 
 class BouncingBallConfigSchema(Schema):
     bounciness = fields.Float(
-        validate=validate.Range(min=0, max=1), missing=0.6
+        validate=validate.Range(min=0, max=1), missing=0.8
     )
     terminal_velocity = fields.Int(validate=validate.Range(min=0), missing=3)
     gravity = fields.Float(validate=validate.Range(min=0), missing=0.05)
