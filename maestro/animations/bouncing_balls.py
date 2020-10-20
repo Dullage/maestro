@@ -1,8 +1,7 @@
 import typing
 
-from marshmallow import Schema, fields, post_load, validate
-
 from light import Light
+from marshmallow import Schema, fields, post_load, validate
 
 from .animation_interface import AnimationInterface
 from .bouncing_ball import BouncingBall
