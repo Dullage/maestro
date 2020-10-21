@@ -5,11 +5,21 @@ from .fire import Fire
 from .police import Police
 from .sparkle import Sparkle
 
-animations = {
-    "bouncing_ball": BouncingBall,
-    "bouncing_balls": BouncingBalls,
-    "fade_sequence": FadeSequence,
-    "fire": Fire,
-    "police": Police,
-    "sparkle": Sparkle,
-}
+
+def get(animation_name):
+    """Return an animation class definition where the class name matches the
+    declared value. Matches are case insensitive.
+
+    Raises a ValueError if no match found.
+    """
+    for animation in [
+        BouncingBall,
+        BouncingBalls,
+        FadeSequence,
+        Fire,
+        Police,
+        Sparkle,
+    ]:
+        if animation.__name__.lower() == animation_name.lower():
+            return animation
+    raise ValueError(f"Unknown animation '{animation_name}'")

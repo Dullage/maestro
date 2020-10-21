@@ -2,7 +2,7 @@ from json import JSONDecodeError
 
 import paho.mqtt.client as mqtt
 import yaml
-from animations import animations
+import animations
 from light import Light
 from logger import log
 from marshmallow import Schema, ValidationError, fields, validate
@@ -97,9 +97,11 @@ class Maestro:
             [self.config["mqtt"]["base_topic"], light_name]
         )
 
-        topics = []
-        topics.append("/".join([base_topic_for_light, self.ON_INSTRUCTION]))
-        topics.append("/".join([base_topic_for_light, self.OFF_INSTRUCTION]))
+        topics = [
+            "/".join([base_topic_for_light, self.ON_INSTRUCTION]),
+            "/".join([base_topic_for_light, self.OFF_INSTRUCTION]),
+        ]
+
         for sub_instruction in [self.ANIMATION_START, self.ANIMATION_STOP]:
             topics.append(
                 "/".join(
@@ -167,22 +169,21 @@ class Maestro:
                     log.error(e)
                     return
 
-                animation_name = validated_payload["animation"]
-                config = validated_payload["config"]
-
                 try:
-                    animation = animations[animation_name](light, config)
-                    log.info(
-                        f"Starting animation '{animation_name}' on '{light_name}'"  # noqa
-                    )
-                    light.start_animation(
-                        animation,
-                        callback=self.animation_finished_callback,
-                        callback_data=payload,
-                    )
-                except KeyError:
-                    log.error(f"Unknown animation '{animation_name}'")
+                    Animation = animations.get(validated_payload["animation"])
+                except ValueError as e:
+                    log.error(e)
                     return
+
+                animation = Animation(light, validated_payload["config"])
+                log.info(
+                    f"Starting animation '{animation.name}' on '{light_name}'"  # noqa
+                )
+                light.start_animation(
+                    animation,
+                    callback=self.animation_finished_callback,
+                    callback_data=payload,
+                )
 
             # Stop
             elif anim_instruction == self.ANIMATION_STOP:
