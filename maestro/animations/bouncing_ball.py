@@ -129,7 +129,7 @@ class BouncingBall(AnimationInterface):
         if adj_trail_length > 0:
             cur_trail_led = self._led_idx
             distance_from_end = adj_trail_length + 1
-            for trail_led in range(adj_trail_length):
+            for _ in range(adj_trail_length):
                 # Goto the next led in the trail
                 if self.config.invert == self._falling:
                     cur_trail_led -= 1
@@ -137,18 +137,17 @@ class BouncingBall(AnimationInterface):
                     cur_trail_led += 1
                 distance_from_end -= 1
 
-                # Calculate the brightness
-                brightness = (1 / (adj_trail_length + 1)) * distance_from_end
-
                 # Update the light state
                 if (
                     cur_trail_led >= 0
                     and cur_trail_led <= self.light.max_index
                 ):
+                    # Calculate the brightness
+                    brightness = (1 / (adj_trail_length + 1)) * distance_from_end
+
                     self.light.set_led(
                         cur_trail_led, self.config.colour, brightness
                     )
-            pass
 
     def set_next_frame(self):
         self.set_new_position()
