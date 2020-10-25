@@ -143,7 +143,9 @@ class BouncingBall(AnimationInterface):
                     and cur_trail_led <= self.light.max_index
                 ):
                     # Calculate the brightness
-                    brightness = (1 / (adj_trail_length + 1)) * distance_from_end
+                    brightness = (
+                        1 / (adj_trail_length + 1)
+                    ) * distance_from_end
 
                     self.light.set_led(
                         cur_trail_led, self.config.colour, brightness
