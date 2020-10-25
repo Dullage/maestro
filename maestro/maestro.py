@@ -134,7 +134,7 @@ class Maestro:
                     "finished",
                 ]
             ),
-            payload=data,
+            payload=data["original_payload"],
         )
 
     def mqtt_on_message(self, client, userdata, msg):
@@ -182,7 +182,10 @@ class Maestro:
                 light.start_animation(
                     animation,
                     callback=self.animation_finished_callback,
-                    callback_data=payload,
+                    callback_data={
+                        "light_name": light_name,
+                        "original_payload": payload,
+                    },
                 )
 
             # Stop
