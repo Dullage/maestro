@@ -153,7 +153,7 @@ class Maestro:
             light.off()
 
         elif instruction == self.ANIMATION_INSTRUCTION:
-            anim_instruction = topic[3]  # TODO: Check behaviour if blank
+            anim_instruction = topic[3]
             payload = msg.payload.decode("utf-8")
 
             # Start
